@@ -15,10 +15,16 @@
 
 <script>
   $(function() {
+
     $('#new-form').submit(function(event){
       event.preventDefault();
-      var textbox = $('.new-todo');
-      console.log("Task: ", textbox.val());
+      var newTask = {
+        task: { //task comes from the $.each I believe?
+        title: $('.new-todo').val() } //default boolean false
+      };
+      $.post("/tasks", newTask).success(function(data) {
+        console.log("Successful HTTP Req.");
+      });
     });
 
     function taskHtml(task) {
@@ -28,18 +34,18 @@
         checkedStatus +
         '><label>' +
         task.title +
-        '</label></div></li>';
+        '</label></div></li>'; //trying to understand the '' & "" locations, seems off to me
       return liElement;
     }
 
-    function toggleTask(e) {
+    function toggleTask(e) { //why don't we use () and $(this) vs e.target?
       var itemId = $(e.target).data("id"); //.data() allows us to attach hidden data to item
       //console.log(itemId);
 
       var doneValue = Boolean($(e.target).is(':checked'));
       //console.log("done:", doneValue);
 
-      $.post("/tasks/" + itemId, {
+      $.post("/tasks/" + itemId, { //why do we need / at the end for updating?
         _method: "PUT",
         task: { done: doneValue }
       });
