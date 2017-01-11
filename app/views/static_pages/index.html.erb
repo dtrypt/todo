@@ -17,8 +17,8 @@
   $(function() {
     $('#new-form').submit(function(event){
       event.preventDefault();
-
-      console.log($('.new-todo').val());
+      var textbox = $('.new-todo');
+      console.log("Task: ", textbox.val());
     });
 
     function taskHtml(task) {
