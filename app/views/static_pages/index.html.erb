@@ -1,6 +1,8 @@
 <section class="todoapp">
   <header class="header">
     <h1>Todos</h1>
+    <form id="new-form">
+      <input type="text" class="new-todo" />
   </header>
 
   <section class="main">
@@ -13,6 +15,11 @@
 
 <script>
   $(function() {
+    $('#new-form').submit(function(event){
+      event.preventDefault();
+
+      console.log($('.new-todo').val());
+    });
 
     function taskHtml(task) {
       var checkedStatus = task.done ? "checked" : "";
