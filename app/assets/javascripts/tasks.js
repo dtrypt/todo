@@ -28,34 +28,13 @@
         console.log(liHtml);
         console.log(data.id);
         var $li = $("#listItem-" + data.id); //why do we use a global $var, seems to not matter
-        $li.replaceWith(liHtml); //replace (id="listItem-*4") with full taskHtml string?
-        $('.toggle').change(toggleTask); //does toggleTask run thru the function again or just output the value?
+        $li.replaceWith(liHtml); //if id of li is replaced, full string is replaced
+        $('.toggle').click(toggleTask); //does toggleTask run thru the function again or just output the value?
       });
     }
 
-      var retrieveIndex = $.get("/tasks").success( function(data) {
-      var htmlString = "";
-      $.each(data, function(index, task) {
-        htmlString += taskHtml(task);
-      });
-
-      var ulTodos = $('.todo-list');
-      ulTodos.html(htmlString);
-
-      $('.toggle').change(toggleTask);
-    });
-
-      $('#new-form').submit(function(event){
-      event.preventDefault();
-      var newTask = {
-        task: { //task comes from the $.each I believe?
-        title: $('.new-todo').val()
-        } //default boolean false because left empty
-      };
-      $.post("/tasks", newTask).success(function() {
-        //var htmlString = taskHtml(data);
-        //var ulTodos = $('.todo-list');
-        $.get("/tasks").success( function(data) { //why can't i call retrieveIndex?? is retrieveIndex getting the value of the function instead of the function itself? L.17
+    function retrieveIndex() {
+      $.get("/tasks").success( function(data) {
         var htmlString = "";
         $.each(data, function(index, task) {
           htmlString += taskHtml(task);
@@ -67,6 +46,22 @@
         $('.toggle').change(toggleTask);
         $('.new-todo').val('');
       });
+    };
+
+    retrieveIndex();
+
+    $('#new-form').submit(function(event){
+      event.preventDefault();
+      var newTask = {
+        task: { //task comes from the $.each I believe?
+          title: $('.new-todo').val()
+        } //default boolean false because left empty
+      };
+      $.post("/tasks", newTask).success(function() {
+        //var htmlString = taskHtml(data);
+        //var ulTodos = $('.todo-list');
+
+        retrieveIndex();
         
         //ulTodos.append(htmlString);
         //$('.toggle').click(toggleTask); //post error on toggle if page isnt refreshed

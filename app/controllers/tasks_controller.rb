@@ -10,6 +10,7 @@ class TasksController < ApplicationController
   end
 
   def create
+    #byebug
     task = Task.create(task_params)
     render json: task_params
   end
